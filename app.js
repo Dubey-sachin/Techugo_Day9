@@ -59,9 +59,9 @@ app.get('/read-user',async(req,res)=>{
     }
 })
 
-// read user by id
+// read user by email
 
-app.get('/read-user/:id',async (req,res)=>{
+app.get('/read-user/:email',async (req,res)=>{
     try {
         const user=await User.findOne({email:req.params.email});
         if(!user) return res.status(404).send("User not found");
@@ -72,21 +72,26 @@ app.get('/read-user/:id',async (req,res)=>{
 });
 
 
-// update by id
-app.put('/update-user/:email', async (req,res)=>{
-    try {
-        const user=await User.findOneAndUpdate({email: req.params.email},
-            req.body,
-             { returnDocument: 'after' });
+// update by email
+app.put('/update-user/:email', async (req, res) => {
+try {
+console.log("PARAM:", req.params.email); 
 
-        if(!user) return res.status(404).send("User not found");
-        res.send("User updated successfully");
-    } catch (error) {
-        res.status(500).send(error.message)
-    }
-})
+const user = await User.findOneAndUpdate(
+{ email: req.params.email },
+req.body,
+{ returnDocument: 'after' }
+);
 
-// delete by id
+if (!user) return res.status(404).send("User not found");
+
+res.send("User updated successfully");
+} catch (error) {
+res.status(500).send(error.message);
+}
+});
+
+// delete by email
 
 app.delete('/delete-user/:email',async (req,res)=>{
 
